@@ -6,7 +6,7 @@ import com.trio.java.bikerentapi.dto.BikeDto;
 
 public class BikeMapper {
 
-    public BikeDto fromBike(Bike bike) {
+    public static BikeDto fromBike(Bike bike) {
         return BikeDto.builder()
                 .withId(bike.getId())
                 .withName(bike.getName())

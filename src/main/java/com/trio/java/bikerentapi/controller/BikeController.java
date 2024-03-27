@@ -20,19 +20,16 @@ public class BikeController {
     @Autowired
     private BikeService bikeService;
 
-
-    private BikeMapper bikeMapper = new BikeMapper();
-
     @GetMapping
     public List<BikeDto> findAll() {
         return bikeService.getAllBikes().stream()
-                .map(b -> bikeMapper.fromBike(b))
+                .map(BikeMapper::fromBike)
                 .toList();
     }
 
     @GetMapping(value = "/{id}")
     public BikeDto findById(@PathVariable("id") int id) {
-        return bikeMapper.fromBike(bikeService.getBikeDetails(id)
+        return BikeMapper.fromBike(bikeService.getBikeDetails(id)
                 .orElseThrow(BikeNotFoundException::new));
     }
 }

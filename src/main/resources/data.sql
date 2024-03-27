@@ -1,5 +1,8 @@
+
+delete from rent;
 delete from bike_images;
 delete from bikes;
+delete from customer;
 
 insert into bikes(id, name, type, body_size, max_load, rate, description, ratings) values(1,'Monahan and Sons','Cruiser Bicycle',24,70,97,'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',4.6);
 insert into bike_images(id, url, bike_id) values(1,'https://cremecycles.com/images/glowne/16.jpg',1);
@@ -81,3 +84,6 @@ insert into bikes(id, name, type, body_size, max_load, rate, description, rating
 insert into bike_images(id, url, bike_id) values(58,'https://cremecycles.com/images/glowne/12.jpg',20);
 insert into bike_images(id, url, bike_id) values(59,'https://cremecycles.com/images/glowne/15.jpg',20);
 insert into bike_images(id, url, bike_id) values(60,'https://cremecycles.com/images/glowne/12.jpg',20);
+
+insert into customer(id, name) values(1, 'test1');
+insert into customer(id, name) values(2, 'test2');
