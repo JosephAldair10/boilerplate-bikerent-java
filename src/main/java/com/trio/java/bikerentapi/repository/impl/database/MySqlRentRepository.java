@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MySqlRentRepository extends JpaRepository<Rent, Integer> {
 
-    List<Rent> getRentsByBikeIdAndStartdateGreaterThanEqualOrEnddateLessThanEqual(Integer id, LocalDate startDate, LocalDate endDate);
+    List<Rent> getRentsByBikeIdAndStartdateGreaterThanEqualOrEnddateLessThanEqual(
+            Integer id, LocalDate startDate, LocalDate endDate);
 }

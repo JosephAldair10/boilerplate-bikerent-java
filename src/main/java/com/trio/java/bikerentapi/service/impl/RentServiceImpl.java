@@ -12,19 +12,18 @@ import com.trio.java.bikerentapi.repository.RentRepository;
 import com.trio.java.bikerentapi.service.BikeService;
 import com.trio.java.bikerentapi.service.CustomerService;
 import com.trio.java.bikerentapi.service.RentService;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 @Service("rentService")
+@Transactional
 public class RentServiceImpl implements RentService {
 
     private static double RENT_FEE = 0.15;
@@ -75,21 +74,28 @@ public class RentServiceImpl implements RentService {
         }
     }
 
-    private boolean isAvailableToRent(List<Rent> bikesRented, LocalDate rentStartDate, LocalDate rentEndDate) {
+    private boolean isAvailableToRent(List<Rent> bikesRented,
+                                      LocalDate rentStartDate,
+                                      LocalDate rentEndDate) {
         if (CollectionUtils.isEmpty(bikesRented)) {
             return Boolean.TRUE;
         }
 
-        return bikesRented.stream().noneMatch(rent -> rentStartDate.isEqual(rent.getStartdate()) ||
-                rentStartDate.isEqual(rent.getEnddate()) ||
-                (rentStartDate.isAfter(rent.getStartdate()) && rentStartDate.isBefore(rent.getEnddate())) ||
-                (rentEndDate.isAfter(rent.getStartdate()) && rentEndDate.isBefore(rent.getEnddate())));
+        return bikesRented.stream().noneMatch(rent -> rentStartDate.isEqual(rent.getStartdate())
+                || rentStartDate.isEqual(rent.getEnddate())
+                || (rentStartDate.isAfter(rent.getStartdate())
+                && rentStartDate.isBefore(rent.getEnddate()))
+                || (rentEndDate.isAfter(rent.getStartdate())
+                && rentEndDate.isBefore(rent.getEnddate())));
     }
 
     private Rent createRent(Bike bike, Customer customer, LocalDate startDate, LocalDate endDate) {
-        int days = Long.valueOf(ChronoUnit.DAYS.between(startDate, endDate)).intValue();
-        double total = BigDecimal.valueOf(bike.getRate() * days).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        double fee = BigDecimal.valueOf(total * RENT_FEE).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        int days = Long.valueOf(
+                ChronoUnit.DAYS.between(startDate, endDate)).intValue() + 1;
+        double total = BigDecimal.valueOf(
+                bike.getRate() * days).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        double fee = BigDecimal.valueOf(
+                total * RENT_FEE).setScale(2, RoundingMode.HALF_UP).doubleValue();
         Rent rent = new Rent();
         rent.setBike(bike);
         rent.setCustomer(customer);

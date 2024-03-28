@@ -4,7 +4,6 @@ import com.trio.java.bikerentapi.data.Rent;
 import com.trio.java.bikerentapi.repository.RentRepository;
 import java.time.LocalDate;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +14,10 @@ public class DatabaseRentRepository implements RentRepository {
     private MySqlRentRepository db;
 
     @Override
-    public List<Rent> getRentsByBikeAndStartDateAndEndDate(Integer id, LocalDate startDate, LocalDate endDate) {
-        return db.getRentsByBikeIdAndStartdateGreaterThanEqualOrEnddateLessThanEqual(id, startDate, endDate);
+    public List<Rent> getRentsByBikeAndStartDateAndEndDate(
+            Integer id, LocalDate startDate, LocalDate endDate) {
+        return db.getRentsByBikeIdAndStartdateGreaterThanEqualOrEnddateLessThanEqual(
+                id, startDate, endDate);
     }
 
     @Override
