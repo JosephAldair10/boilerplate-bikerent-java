@@ -18,6 +18,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -25,6 +27,8 @@ import org.springframework.util.CollectionUtils;
 @Service("rentService")
 @Transactional
 public class RentServiceImpl implements RentService {
+
+    Logger logger = LoggerFactory.getLogger(RentService.class);
 
     private static double RENT_FEE = 0.15;
 
@@ -43,15 +47,18 @@ public class RentServiceImpl implements RentService {
 
     @Override
     public Rent rent(RentDto rentDto) {
+        logger.info("Invoking rent service...");
         validRentDates(rentDto.getStartDate(), rentDto.getEndDate());
         Optional<Bike> actualBike = bikeService.getBikeDetails(rentDto.getBike().getId());
         Optional<Customer> actualCustomer = customerService.getCustomerDetails(
                 rentDto.getCustomer().getId());
         if (!actualBike.isPresent()) {
+            logger.error("Bike with id {} not found", rentDto.getBike().getId());
             throw new BikeNotFoundException();
         }
 
         if (!actualCustomer.isPresent()) {
+            logger.error("Customer with id {} not found", rentDto.getCustomer().getId());
             throw new CustomerNotFoundException();
         }
 
@@ -62,14 +69,18 @@ public class RentServiceImpl implements RentService {
         List<Rent> bikesRented = rentRepository.getRentsByBikeAndStartDateAndEndDate(bike.getId(),
                 rentStartDate, rentEndDate);
         if (isAvailableToRent(bikesRented, rentStartDate, rentEndDate)) {
+            logger.debug("Bike with id {} is available for dates {} - {}",
+                    bike.getId(), rentStartDate, rentEndDate);
             return createRent(bike, customer, rentStartDate, rentEndDate);
         } else {
+            logger.error("Bike not available for dates {} - {}", rentStartDate, rentEndDate);
             throw new BikeNotAvailableException();
         }
     }
 
     private void validRentDates(LocalDate startDate, LocalDate endDate) {
         if (endDate.isBefore(startDate)) {
+            logger.error("Dates are invalid {} - {}", startDate, endDate);
             throw new InvalidRentDatesException();
         }
     }
@@ -90,6 +101,7 @@ public class RentServiceImpl implements RentService {
     }
 
     private Rent createRent(Bike bike, Customer customer, LocalDate startDate, LocalDate endDate) {
+        logger.info("Creating a new rent...");
         int days = Long.valueOf(
                 ChronoUnit.DAYS.between(startDate, endDate)).intValue() + 1;
         double total = BigDecimal.valueOf(
@@ -104,6 +116,7 @@ public class RentServiceImpl implements RentService {
         rent.setDays(days);
         rent.setTotal(total);
         rent.setFee(fee);
+        logger.debug("Rent for bike {} and date {} - {} created successfully", bike.getId(), startDate, endDate);
         return rentRepository.save(rent);
     }
 }
