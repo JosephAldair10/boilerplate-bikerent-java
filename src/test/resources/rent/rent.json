@@ -1,0 +1,33 @@
+{
+  "id": 1,
+  "bike": {
+    "id": 1,
+    "name": "Monahan and Sons",
+    "type": "Cruiser Bicycle",
+    "bodySize": 24,
+    "maxLoad": 70,
+    "rate": 97.0,
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "ratings": 4.6,
+    "imageUrls": [
+      {
+        "id": 1,
+        "url": "https://cremecycles.com/images/glowne/13.jpg"
+      },
+      {
+        "id": 2,
+        "url": "https://cremecycles.com/images/glowne/15.jpg"
+      },
+      {
+        "id": 3,
+        "url": "https://cremecycles.com/images/glowne/16.jpg"
+      }
+    ]
+  },
+  "customer": {
+    "id": 1,
+    "name": "test"
+  },
+  "startdate": "03-04-2024",
+  "enddate": "08-04-2024"
+}

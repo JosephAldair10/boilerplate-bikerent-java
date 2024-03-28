@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:test-application.properties")
-class IntegrationTests {
+class BikeIntegrationTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -24,10 +24,10 @@ class IntegrationTests {
     @Test
     void shouldReturnBikes() throws Exception {
         this.mockMvc.perform(
-            get("/api/bikes")
-        )
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()", Matchers.greaterThan(0)));
+                        get("/api/bikes")
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", Matchers.greaterThan(0)));
     }
 
     @Test
@@ -35,19 +35,19 @@ class IntegrationTests {
         int id = 1;
 
         this.mockMvc.perform(
-            get(String.format("/api/bikes/%s", id))
-        )
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id", equalTo(id)))
-        .andExpect(jsonPath("$.name", equalTo("Monahan and Sons")));
+                        get(String.format("/api/bikes/%s", id))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(id)))
+                .andExpect(jsonPath("$.name", equalTo("Monahan and Sons")));
     }
 
     @Test
     void shouldReturnErrorForUnknownBike() throws Exception {
         int id = 404;
         this.mockMvc.perform(
-            get(String.format("/api/bikes/%s", id))
-        )
-        .andExpect(status().isNotFound());
+                        get(String.format("/api/bikes/%s", id))
+                )
+                .andExpect(status().isNotFound());
     }
 }
